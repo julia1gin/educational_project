@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Урок: Теорема Пифагора</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f5f5f5;
+        }
+        
+        header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.5rem;
+        }
+        
+        nav {
+            background: white;
+            padding: 1rem;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        nav ul {
+            list-style: none;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: #667eea;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: #764ba2;
+        }
+        
+        main {
+            max-width: 900px;
+            margin: 2rem auto;
+            padding: 0 1rem;
+        }
+        
+        section {
+            background: white;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        h3 {
+            color: #764ba2;
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        
+        .definition {
+            background: #e8eaf6;
+            padding: 1.5rem;
+            border-left: 5px solid #667eea;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        
+        .example {
+            background: #f3e5f5;
+            padding: 1.5rem;
+            border-left: 5px solid #764ba2;
+            border-radius: 5px;
+            margin: 1rem 0;
+        }
+        
+        .task {
+            background: #fff3e0;
+            padding: 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            border: 2px dashed #ff9800;
+        }
+        
+        .answer {
+            display: none;
+            margin-top: 1rem;
+            padding: 1rem;
+            background: #e8f5e9;
+            border-radius: 5px;
+            border-left: 5px solid #4caf50;
+        }
+        
+        .answer.show {
+            display: block;
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.7rem 1.5rem;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: all 0.3s;
+        }
+        
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        
+        footer {
+            text-align: center;
+            padding: 1rem;
+            background: #f5f5f5;
+            color: #666;
+        }
+        
+        /* Адаптивный дизайн */
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 2em;
+            }
+            nav ul {
+                flex-direction: column;
+                gap: 1rem;
+            }
+            main {
+                padding: 0 0.5rem;
+            }
+            section {
+                padding: 1rem;
+            }
+            button {
+                width: 100%;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                font-size: 14px;
+            }
+            h2 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Теорема Пифагора</h1>
+    </header>
+    
+    <nav>
+        <ul>
+            <li><a href="#theory">Теория</a></li>
+            <li><a href="#examples">Примеры</a></li>
+            <li><a href="#tasks">Задания</a></li>
+        </ul>
+    </nav>
+    
+    <main>
+        <section id="theory">
+            <h2>Теория</h2>
+            <p>Теорема Пифагора — фундаментальная теорема в геометрии, которая гласит: в прямоугольном треугольнике квадрат длины гипотенузы равен сумме квадратов длин двух катетов. Это основополагающая теорема евклидовой геометрии, связывающая стороны прямоугольного треугольника и позволяющая находить длину неизвестной стороны, зная две другие. </p>
+            <div class="definition">
+                <h3>Формула</h3>
+                <p>c² = a² + b², где c — гипотенуза, a и b — катеты.</p>
+            </div>
+        </section>
+        
+        <section id="examples">
+            <h2>Интерактивные примеры</h2>
+            <div class="example">
+                <h3>Пример 1: Катеты 3 и 4</h3>
+                <p>Расчёт: c² = 3² + 4² = 9 + 16 = 25, c = √25 = 5.</p>
+                <button onclick="toggleAnswer('example1')">Показать детали</button>
+                <div id="example1" class="answer">
+                    <p>Шаг 1: Квадрат первого катета: 3² = 9.</p>
+                    <p>Шаг 2: Квадрат второго катета: 4² = 16.</p>
+                    <p>Шаг 3: Сумма: 9 + 16 = 25.</p>
+                    <p>Шаг 4: Квадратный корень: √25 = 5.</p>
+                </div>
+            </div>
+            
+            <div class="example">
+                <h3>Пример 2: Катеты 5 и 12</h3>
+                <p>Расчёт: c² = 5² + 12² = 25 + 144 = 169, c = √169 = 13.</p>
+                <button onclick="toggleAnswer('example2')">Показать детали</button>
+                <div id="example2" class="answer">
+                    <p>Шаг 1: Квадрат первого катета: 5² = 25.</p>
+                    <p>Шаг 2: Квадрат второго катета: 12² = 144.</p>
+                    <p>Шаг 3: Сумма: 25 + 144 = 169.</p>
+                    <p>Шаг 4: Квадратный корень: √169 = 13.</p>
+                </div>
+            </div>
+        </section>
+        
+        <section id="tasks">
+            <h2>Задания для самопроверки</h2>
+            <div class="task">
+                <h3>Задание 1</h3>
+                <p>Катеты 6 и 8. Найдите гипотенузу.</p>
+                <button onclick="toggleAnswer('answer1')">Показать ответ</button>
+                <div id="answer1" class="answer">
+                    <p>Расчёт: c² = 6² + 8² = 36 + 64 = 100, c = √100 = 10.</p>
+                </div>
+            </div>
+            
+            <div class="task">
+                <h3>Задание 2</h3>
+                <p>Катеты 7 и 24. Найдите гипотенузу.</p>
+                <button onclick="toggleAnswer('answer2')">Показать ответ</button>
+                <div id="answer2" class="answer">
+                    <p>Расчёт: c² = 7² + 24² = 49 + 576 = 625, c = √625 = 25.</p>
+                </div>
+            </div>
+            
+            <div class="task">
+                <h3>Задание 3</h3>
+                <p>Катеты 8 и 15. Найдите гипотенузу.</p>
+                <button onclick="toggleAnswer('answer3')">Показать ответ</button>
+                <div id="answer3" class="answer">
+                    <p>Расчёт: c² = 8² + 15² = 64 + 225 = 289, c = √289 = 17.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <footer>
+        <p>&copy; 2026 | Гиниятуллина Юлия | Разработано для проекта</p>
+    </footer>
+    
+    <script>
+        // Функция переключения видимости ответа
+        function toggleAnswer(answerId) {
+            const answer = document.getElementById(answerId);
+            answer.classList.toggle('show');
+            
+            // Меняем текст кнопки
+            const button = answer.previousElementSibling;
+            if (answer.classList.contains('show')) {
+                button.textContent = 'Скрыть ответ';
+            } else {
+                button.textContent = 'Показать ответ';
+            }
+        }
+        
+        // Плавная прокрутка для навигации
+        document.querySelectorAll('nav a').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetSection = document.querySelector(targetId);
+                targetSection.scrollIntoView({ behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
