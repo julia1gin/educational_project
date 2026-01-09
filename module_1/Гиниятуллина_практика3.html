@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Игра: Тренажер теоремы Пифагора</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .game-container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+        }
+        
+        .game-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+        
+        .game-header h1 {
+            font-size: 2.5em;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stats {
+            display: flex;
+            justify-content: space-around;
+            padding: 1.5rem;
+            background: #f5f5f5;
+            border-bottom: 3px solid #e0e0e0;
+        }
+        
+        .stat {
+            text-align: center;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .game-screen {
+            padding: 3rem 2rem;
+            min-height: 300px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .start-screen {
+            text-align: center;
+        }
+        
+        .start-screen h2 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .difficulty-buttons {
+            display: flex;
+            gap: 1rem;
+            margin: 2rem 0;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 1rem 2rem;
+            font-size: 1.1em;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s;
+        }
+        
+        .btn-easy {
+            background: #4caf50;
+            color: white;
+        }
+        
+        .btn-medium {
+            background: #ff9800;
+            color: white;
+        }
+        
+        .btn-hard {
+            background: #f44336;
+            color: white;
+        }
+        
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .question {
+            font-size: 4em;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 2rem;
+            animation: slideIn 0.3s;
+        }
+        
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .input-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+        
+        .answer-input {
+            width: 200px;
+            padding: 1rem;
+            font-size: 2em;
+            text-align: center;
+            border: 3px solid #667eea;
+            border-radius: 10px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+        }
+        
+        .answer-input.correct {
+            border-color: #4caf50;
+            box-shadow: 0 0 15px rgba(76, 175, 80, 0.5);
+        }
+        
+        .answer-input.incorrect {
+            border-color: #f44336;
+            box-shadow: 0 0 15px rgba(244, 67, 54, 0.5);
+        }
+        
+        .answer-input:focus {
+            outline: none;
+            border-color: #764ba2;
+        }
+        
+        .check-btn {
+            background: #667eea;
+            color: white;
+        }
+        
+        .check-btn:hover {
+            background: #5568d3;
+        }
+        
+        .feedback {
+            font-size: 1.5em;
+            font-weight: bold;
+            min-height: 40px;
+            margin-top: 1rem;
+        }
+        
+        .correct {
+            color: #4caf50;
+            animation: bounce 0.5s;
+        }
+        
+        .incorrect {
+            color: #f44336;
+            animation: shake 0.5s;
+        }
+        
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-20px); }
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        
+        .results-screen {
+            text-align: center;
+        }
+        
+        .results-screen h2 {
+            color: #667eea;
+            font-size: 2em;
+            margin-bottom: 1rem;
+        }
+        
+        .final-score {
+            font-size: 5em;
+            font-weight: bold;
+            color: #667eea;
+            margin: 1rem 0;
+        }
+        
+        .results-stats {
+            background: #f5f5f5;
+            padding: 1.5rem;
+            border-radius: 10px;
+            margin: 2rem 0;
+        }
+        
+        .results-stats p {
+            font-size: 1.2em;
+            margin: 0.5rem 0;
+        }
+        
+        .high-scores {
+            margin-top: 2rem;
+            text-align: left;
+        }
+        
+        .high-scores h3 {
+            color: #667eea;
+            margin-bottom: 1rem;
+        }
+        
+        .score-item {
+            background: #f5f5f5;
+            padding: 0.8rem;
+            margin-bottom: 0.5rem;
+            border-radius: 5px;
+            display: flex;
+            justify-content: space-between;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .instructions {
+            padding: 1rem;
+            background: #e8eaf6;
+            margin: 1rem 0;
+            border-radius: 10px;
+        }
+        
+        /* Адаптивный дизайн */
+        @media (max-width: 768px) {
+            .question {
+                font-size: 2.5em;
+            }
+            
+            .answer-input {
+                width: 150px;
+                font-size: 1.5em;
+            }
+            
+            .difficulty-buttons {
+                flex-direction: column;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .game-header h1 {
+                font-size: 2em;
+            }
+            .stats {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="game-container">
+        <div class="game-header">
+            <h1>Тренажер теоремы Пифагора</h1>
+            <p>Сможешь решить все примеры на скорость?</p>
+        </div>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-label">Очки</div>
+                <div class="stat-value" id="score">0</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Время</div>
+                <div class="stat-value" id="timer">60</div>
+            </div>
+            <div class="stat">
+                <div class="stat-label">Серия</div>
+                <div class="stat-value" id="streak">0</div>
+            </div>
+        </div>
+        
+        <div id="startScreen" class="game-screen start-screen">
+            <h2>Выберите сложность</h2>
+            <div class="difficulty-buttons">
+                <button class="btn btn-easy" onclick="startGame('easy')">Легко</button>
+                <button class="btn btn-medium" onclick="startGame('medium')">Средне</button>
+                <button class="btn btn-hard" onclick="startGame('hard')">Сложно</button>
+            </div>
+            <div class="instructions">
+                <h3>Инструкция</h3>
+                <p>Даны катеты a и b прямоугольного треугольника. Найдите гипотенузу c (целое число).</p>
+                <p>Введите ответ и нажмите Enter или кнопку "Проверить".</p>
+                <p>Время: 60 секунд. За правильный ответ — 10 очков + бонус за серию.</p>
+                <p>Результаты сохраняются в таблице рекордов в браузере.</p>
+            </div>
+            <div id="highScoresStart" class="high-scores"></div>
+        </div>
+        
+        <div id="gameScreen" class="game-screen hidden">
+            <div id="question" class="question"></div>
+            <div class="input-group">
+                <input type="number" id="answerInput" class="answer-input" placeholder="?">
+                <button class="btn check-btn" onclick="checkAnswer()">Проверить</button>
+            </div>
+            <div id="feedback" class="feedback"></div>
+        </div>
+        
+        <div id="resultsScreen" class="game-screen results-screen hidden">
+            <h2>Игра завершена!</h2>
+            <div id="finalScore" class="final-score">0</div>
+            <div class="results-stats">
+                <p>Правильных ответов: <span id="correctAnswers">0</span></p>
+                <p>Неправильных: <span id="wrongAnswers">0</span></p>
+                <p>Точность: <span id="accuracy">0%</span></p>
+                <p>Лучшая серия: <span id="bestStreak">0</span></p>
+            </div>
+            <button class="btn btn-primary" onclick="resetGame()">Начать заново</button>
+            <div id="highScoresEnd" class="high-scores"></div>
+        </div>
+    </div>
+    
+    <script>
+        // Список пифагоровых троек (a, b, c) — только целые числа
+        const pythagoreanTriples = [
+            // Легкие
+            { a: 3, b: 4, c: 5 },
+            { a: 5, b: 12, c: 13 },
+            { a: 6, b: 8, c: 10 },
+            { a: 9, b: 12, c: 15 },
+            { a: 8, b: 15, c: 17 },
+            // Средние
+            { a: 7, b: 24, c: 25 },
+            { a: 20, b: 21, c: 29 },
+            { a: 12, b: 16, c: 20 },
+            { a: 15, b: 20, c: 25 },
+            { a: 9, b: 40, c: 41 },
+            // Сложные
+            { a: 18, b: 24, c: 30 },
+            { a: 21, b: 28, c: 35 },
+            { a: 16, b: 30, c: 34 },
+            { a: 24, b: 32, c: 40 },
+            { a: 25, b: 60, c: 65 },
+            { a: 28, b: 45, c: 53 },
+            { a: 33, b: 56, c: 65 },
+            { a: 36, b: 77, c: 85 },
+            { a: 40, b: 42, c: 58 },
+            { a: 48, b: 55, c: 73 }
+        ];
+        
+        let isPlaying = false;
+        let score = 0;
+        let timeLeft = 60;
+        let streak = 0;
+        let bestStreak = 0;
+        let correctCount = 0;
+        let wrongCount = 0;
+        let timerInterval;
+        let difficulty = 'easy';
+        let currentTriple = null;
+        
+        // Выбор тройки в зависимости от сложности
+        function getRandomTriple() {
+            let pool;
+            if (difficulty === 'easy') {
+                pool = pythagoreanTriples.slice(0, 8); // первые 8 — простые
+            } else if (difficulty === 'medium') {
+                pool = pythagoreanTriples.slice(5, 15);
+            } else {
+                pool = pythagoreanTriples.slice(10);
+            }
+            return pool[Math.floor(Math.random() * pool.length)];
+        }
+        
+        function generateQuestion() {
+            currentTriple = getRandomTriple();
+            const { a, b } = currentTriple;
+            // Случайный порядок катетов
+            if (Math.random() > 0.5) {
+                document.getElementById('question').textContent = `Катеты: ${a} и ${b}. Найдите гипотенузу c`;
+            } else {
+                document.getElementById('question').textContent = `Катеты: ${b} и ${a}. Найдите гипотенузу c`;
+            }
+            
+            document.getElementById('answerInput').value = '';
+            document.getElementById('answerInput').classList.remove('correct', 'incorrect');
+            document.getElementById('feedback').textContent = '';
+            document.getElementById('answerInput').focus();
+        }
+        
+        function startGame(diff) {
+            difficulty = diff;
+            isPlaying = true;
+            score = 0;
+            streak = 0;
+            bestStreak = 0;
+            correctCount = 0;
+            wrongCount = 0;
+            timeLeft = 60;
+            
+            document.getElementById('startScreen').classList.add('hidden');
+            document.getElementById('gameScreen').classList.remove('hidden');
+            
+            updateStats();
+            generateQuestion();
+            startTimer();
+        }
+        
+        function checkAnswer() {
+            if (!isPlaying) return;
+            
+            const input = document.getElementById('answerInput');
+            const userAnswer = parseInt(input.value);
+            const feedback = document.getElementById('feedback');
+            
+            if (isNaN(userAnswer)) {
+                feedback.textContent = 'Введите число!';
+                feedback.className = 'feedback';
+                return;
+            }
+            
+            if (userAnswer === currentTriple.c) {
+                correctCount++;
+                streak++;
+                if (streak > bestStreak) bestStreak = streak;
+                
+                const points = 10 + (streak > 1 ? (streak - 1) * 5 : 0);
+                score += points;
+                
+                feedback.textContent = streak > 1 ? `✓ Правильно! +${points} (Серия x${streak})` : '✓ Правильно!';
+                feedback.className = 'feedback correct';
+                input.classList.add('correct');
+                
+                setTimeout(() => {
+                    generateQuestion();
+                }, 800);
+            } else {
+                wrongCount++;
+                streak = 0;
+                
+                feedback.textContent = `✗ Неправильно! Правильный ответ: ${currentTriple.c}`;
+                feedback.className = 'feedback incorrect';
+                input.classList.add('incorrect');
+                
+                setTimeout(() => {
+                    generateQuestion();
+                }, 1500);
+            }
+            
+            updateStats();
+        }
+        
+        function updateStats() {
+            document.getElementById('score').textContent = score;
+            document.getElementById('timer').textContent = timeLeft;
+            document.getElementById('streak').textContent = streak;
+        }
+        
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                timeLeft--;
+                updateStats();
+                
+                if (timeLeft <= 10) {
+                    document.getElementById('timer').style.color = '#f44336';
+                }
+                
+                if (timeLeft <= 0) {
+                    endGame();
+                }
+            }, 1000);
+        }
+        
+        function endGame() {
+            clearInterval(timerInterval);
+            isPlaying = false;
+            
+            document.getElementById('gameScreen').classList.add('hidden');
+            document.getElementById('resultsScreen').classList.remove('hidden');
+            
+            const accuracy = correctCount + wrongCount > 0 
+                ? Math.round((correctCount / (correctCount + wrongCount)) * 100) 
+                : 0;
+            
+            document.getElementById('finalScore').textContent = score;
+            document.getElementById('correctAnswers').textContent = correctCount;
+            document.getElementById('wrongAnswers').textContent = wrongCount;
+            document.getElementById('accuracy').textContent = accuracy + '%';
+            document.getElementById('bestStreak').textContent = bestStreak;
+            
+            saveHighScore(score, difficulty);
+            displayHighScores('highScoresEnd');
+        }
+        
+        function saveHighScore(newScore, diff) {
+            let highScores = JSON.parse(localStorage.getItem('pythagorasGameScores')) || {};
+            
+            if (!highScores[diff]) highScores[diff] = [];
+            
+            highScores[diff].push({ score: newScore, date: new Date().toLocaleDateString('ru-RU') });
+            highScores[diff].sort((a, b) => b.score - a.score);
+            highScores[diff] = highScores[diff].slice(0, 5);
+            
+            localStorage.setItem('pythagorasGameScores', JSON.stringify(highScores));
+        }
+        
+        function displayHighScores(elementId) {
+            const highScores = JSON.parse(localStorage.getItem('pythagorasGameScores')) || {};
+            const container = document.getElementById(elementId);
+            
+            let html = '<h3>🏆 Таблица рекордов</h3>';
+            ['easy', 'medium', 'hard'].forEach(diff => {
+                if (highScores[diff] && highScores[diff].length > 0) {
+                    const diffName = diff === 'easy' ? 'Легкий' : diff === 'medium' ? 'Средний' : 'Сложный';
+                    html += `<p style="margin-top: 1rem;"><strong>${diffName}:</strong></p>`;
+                    highScores[diff].forEach((item, index) => {
+                        html += `<div class="score-item"><span>${index + 1}. ${item.score} очков</span><span>${item.date}</span></div>`;
+                    });
+                }
+            });
+            
+            container.innerHTML = html;
+        }
+        
+        function resetGame() {
+            document.getElementById('resultsScreen').classList.add('hidden');
+            document.getElementById('startScreen').classList.remove('hidden');
+            document.getElementById('timer').style.color = '#667eea';
+            displayHighScores('highScoresStart');
+        }
+        
+        // Обработка Enter в поле ввода
+        document.addEventListener('DOMContentLoaded', () => {
+            displayHighScores('highScoresStart');
+            
+            document.getElementById('answerInput').addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    checkAnswer();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
